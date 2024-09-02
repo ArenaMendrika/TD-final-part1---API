@@ -2,8 +2,7 @@ openapi: 3.0.0
 info:
   title: Football Match Management API
   version: 1.0.0
-  description: |
-    This API manages football tournaments, teams, and players. It allows the creation and retrieval of tournaments, teams, and players, and provides endpoints for associating teams with tournaments and players with teams.
+  description: This API manages football tournaments, teams, and players. It allows the creation and retrieval of tournaments, teams, and players, and provides endpoints for associating teams with tournaments and players with teams.
 servers:
   - url: https://localhost.std23034.com
 
