@@ -5,7 +5,7 @@ info:
   description: |
     This API manages football tournaments, teams, and players. It allows the creation and retrieval of tournaments, teams, and players, and provides endpoints for associating teams with tournaments and players with teams.
 servers:
-  - url: https://api.soccer-management.com
+  - url: https://localhost.std23034.com
 
 paths:
   /tournaments:
