@@ -1,0 +1,254 @@
+openapi: 3.0.0
+info:
+  title: Football Match Management API
+  version: 1.0.0
+  description: |
+    This API manages football tournaments, teams, and players. It allows the creation and retrieval of tournaments, teams, and players, and provides endpoints for associating teams with tournaments and players with teams.
+servers:
+  - url: https://api.soccer-management.com
+
+paths:
+  /tournaments:
+    post:
+      summary: Create a new tournament
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tournament'
+      responses:
+        '201':
+          description: Tournament successfully created
+          content:
+            application/json:
+        '400':
+          description: Invalid input data
+    get:
+      summary: Retrieve a list of tournaments
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Page number to retrieve
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+          description: Number of items to display per page
+      responses:
+        '200':
+          description: List of tournaments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tournament'
+        '404':
+          description: No tournaments found
+
+  /teams:
+    post:
+      summary: Register a new team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Team'
+      responses:
+        '201':
+          description: Team successfully registered
+          content:
+            application/json:
+        '400':
+          description: Invalid input data
+    get:
+      summary: Retrieve a list of teams
+      parameters:
+        - in: query
+          name: teamName
+          schema:
+            type: string
+          description: Filter teams by name
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Page number to retrieve
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+          description: Number of items to display per page
+      responses:
+        '200':
+          description: List of teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+        '404':
+          description: No teams found
+
+  /teams/{teamId}/tournaments:
+    post:
+      summary: Associate a team with tournaments
+      parameters:
+        - in: path
+          name: teamId
+          required: true
+          schema:
+            type: string
+          description: The ID of the team to associate with tournaments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                description: Tournament ID
+      responses:
+        '200':
+          description: Tournaments successfully associated with the team
+          content:
+            application/json:
+        '400':
+          description: Invalid tournament IDs provided
+        '404':
+          description: Team not found
+
+  /players:
+    post:
+      summary: Register a new player
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Player'
+      responses:
+        '201':
+          description: Player successfully registered
+          content:
+            application/json:
+        '400':
+          description: Invalid input data
+    get:
+      summary: Retrieve a list of players
+      parameters:
+        - in: query
+          name: playerName
+          schema:
+            type: string
+          description: Filter players by name
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Page number to retrieve
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+          description: Number of items to display per page
+      responses:
+        '200':
+          description: List of players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+        '404':
+          description: No players found
+
+  /teams/{teamId}/players:
+    post:
+      summary: Associate players with a team
+      parameters:
+        - in: path
+          name: teamId
+          required: true
+          schema:
+            type: string
+          description: The ID of the team to associate players with
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                description: Player ID
+      responses:
+        '200':
+          description: Players successfully associated with the team
+          content:
+            application/json:
+        '400':
+          description: Invalid player IDs provided
+        '404':
+          description: Team not found
+
+components:
+  schemas:
+    Tournament:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the tournament
+        location:
+          type: string
+          description: The country or region where the tournament is held
+      required:
+        - name
+        - location
+    
+    Team:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The team's name
+        slogan:
+          type: string
+          description: The team's slogan
+      required:
+        - name
+        - slogan
+
+    Player:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The player's name
+        number:
+          type: integer
+          description: The jersey number of the player
+        strongFoot:
+          type: string
+          enum:
+            - Left
+            - Right
+          description: The player's dominant foot
+      required:
+        - name
+        - number
+        - strongFoot
